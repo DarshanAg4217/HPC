@@ -1,0 +1,129 @@
+PRACTICAL NO. 3
+
+Implement Min, Max, Sum and Average operations using Parallel Reduction.
+
+SHORT DEFINITION:
+This program uses OpenMP Parallel Reduction to calculate Minimum, Maximum, Sum and Average of array elements using multiple threads simultaneously. Parallel processing increases execution speed by dividing work among threads.
+
+REAL LIFE EXAMPLE:
+Suppose 100 answer sheets need to be checked.
+
+Sequential Processing:
+One teacher checks all papers one by one.
+
+Parallel Processing:
+4 teachers check different sets of papers at the same time and final marks are combined.
+
+This reduces total time.
+
+USE CASES:
+1. Big data processing
+2. Scientific calculations
+3. Machine learning
+4. Data analytics
+5. Image processing
+6. Large database operations
+
+CODE:
+
+#include <iostream>
+#include <omp.h>
+
+using namespace std;
+
+int main()
+{
+    int n, sum = 0;
+
+    cout << "Enter size: ";
+    cin >> n;
+
+    int *arr = new int[n];
+
+    cout << "Enter elements:\n";
+
+    for(int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+
+    int min = arr[0];
+    int max = arr[0];
+
+    #pragma omp parallel for reduction(+:sum) reduction(min:min) reduction(max:max)
+
+    for(int i = 0; i < n; i++)
+    {
+        sum += arr[i];
+
+        if(arr[i] < min)
+            min = arr[i];
+
+        if(arr[i] > max)
+            max = arr[i];
+    }
+
+    float avg = (float)sum / n;
+
+    cout << "Minimum = " << min << endl;
+    cout << "Maximum = " << max << endl;
+    cout << "Sum = " << sum << endl;
+    cout << "Average = " << avg << endl;
+
+    delete[] arr;
+
+    return 0;
+}
+
+IMPORTANT VIVA QUESTIONS:
+
+Q1) What is OpenMP?
+OpenMP is an API used for parallel programming.
+
+Q2) What is Parallel Processing?
+Executing multiple tasks simultaneously using multiple threads.
+
+Q3) What is Reduction?
+Reduction combines partial results from multiple threads into one final result.
+
+Q4) Why use parallel processing?
+To increase execution speed and efficiency.
+
+Q5) What does #pragma omp parallel for do?
+It divides loop iterations among multiple threads.
+
+Q6) Why is reduction used with sum?
+To safely combine sums from all threads.
+
+Q7) What is the advantage of OpenMP?
+Easy implementation of parallel programming.
+
+Q8) Difference between Sequential and Parallel Processing?
+Sequential uses one thread, parallel uses multiple threads.
+
+UBUNTU EXECUTION STEPS:
+
+1. Open Terminal
+Shortcut:
+Ctrl + Alt + T
+
+2. Create File
+gedit program.cpp
+
+3. Paste Code and Save
+
+4. Compile Program
+g++ program.cpp -fopenmp
+
+5. Run Program
+./a.out
+
+SAMPLE INPUT:
+5
+10 20 30 40 50
+
+SAMPLE OUTPUT:
+Minimum = 10
+Maximum = 50
+Sum = 150
+Average = 30
